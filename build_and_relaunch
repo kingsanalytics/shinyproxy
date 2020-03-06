@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mvn -U clean install
+sudo cp target/shinyproxy*.jar /opt/shinyproxy/shinyproxy.jar.new
+sudo systemctl restart shinyproxy
