@@ -22,6 +22,8 @@ package eu.openanalytics.shinyproxy.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,14 +50,36 @@ public class IndexController extends BaseController {
 		Map<ProxySpec, String> appLogos = new HashMap<>();
 		map.put("appLogos", appLogos);
 		
+		List<String> potential_categories = new ArrayList<String>();
+		potential_categories.add("player");
+		potential_categories.add("team");
+		potential_categories.add("draft");
+		potential_categories.add("scouting");
+		potential_categories.add("transactions");
+		potential_categories.add("miscellaneous");
+
+	 	List<String> categories = new ArrayList<String>(potential_categories);
+		List<String> user_categories = new ArrayList<String>();
+		
 		boolean displayAppLogos = false;
 		for (ProxySpec app: apps) {
+		  if (!user_categories.contains(app.getDescription())) {
+				user_categories.add(app.getDescription());
+			}
 			if (app.getLogoURL() != null) {
 				displayAppLogos = true;
 				appLogos.put(app, resolveImageURI(app.getLogoURL()));
 			}
 		}
 		map.put("displayAppLogos", displayAppLogos);
+		
+		for (String cat: potential_categories) {
+			if (!user_categories.contains(cat)) {
+				categories.remove(cat);
+			}
+		}
+			
+		map.put("appCategories", categories);
 
 		return "index";
     }

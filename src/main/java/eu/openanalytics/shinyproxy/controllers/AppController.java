@@ -39,8 +39,13 @@ import eu.openanalytics.containerproxy.model.spec.ProxySpec;
 import eu.openanalytics.containerproxy.util.ProxyMappingManager;
 import eu.openanalytics.containerproxy.util.Retrying;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @Controller
 public class AppController extends BaseController {
+
+	private Logger log = LogManager.getLogger(AppController.class);
 
 	@Inject
 	private ProxyMappingManager mappingManager;
@@ -77,6 +82,7 @@ public class AppController extends BaseController {
 	@RequestMapping(value="/app_direct/**")
 	public void appDirect(HttpServletRequest request, HttpServletResponse response) {
 		Proxy proxy = getOrStart(request);
+		
 		String mapping = getProxyEndpoint(proxy);
 		
 		String subPath = request.getRequestURI();
